@@ -1,0 +1,231 @@
+package com.fleettools.data;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.util.Identifier;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+public class PlayerDataManager {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final String DATA_FOLDER = "fleettools";
+    private static final String PLAYERS_FOLDER = "players";
+    private static final String GLOBAL_DATA_FILE = "global.json";
+    
+    private static final Map<UUID, PlayerData> playerDataCache = new HashMap<>();
+    private static GlobalData globalData;
+    
+    public static class PlayerData {
+        public Vec3d homeLocation;
+        public String homeWorld;
+        public Vec3d lastLocation;
+        public String lastWorld;
+        public boolean godMode = false;
+        public boolean flyEnabled = false;
+        
+        public PlayerData() {}
+    }
+    
+    public static class GlobalData {
+        public Vec3d spawnLocation;
+        public String spawnWorld;
+        
+        public GlobalData() {}
+    }
+    
+    public static void init(MinecraftServer server) {
+        try {
+            Path dataDir = server.getRunDirectory().toPath().resolve(DATA_FOLDER);
+            Path playersDir = dataDir.resolve(PLAYERS_FOLDER);
+            
+            if (!Files.exists(dataDir)) {
+                Files.createDirectories(dataDir);
+            }
+            if (!Files.exists(playersDir)) {
+                Files.createDirectories(playersDir);
+            }
+            
+            // Load global data
+            loadGlobalData(server);
+            
+        } catch (IOException e) {
+            System.err.println("Failed to initialize FleetTools data manager: " + e.getMessage());
+        }
+    }
+    
+    private static void loadGlobalData(MinecraftServer server) {
+        try {
+            Path globalFile = server.getRunDirectory().toPath().resolve(DATA_FOLDER).resolve(GLOBAL_DATA_FILE);
+            if (Files.exists(globalFile)) {
+                String json = Files.readString(globalFile);
+                globalData = GSON.fromJson(json, GlobalData.class);
+            } else {
+                globalData = new GlobalData();
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to load global data: " + e.getMessage());
+            globalData = new GlobalData();
+        }
+    }
+    
+    private static void saveGlobalData(MinecraftServer server) {
+        try {
+            Path globalFile = server.getRunDirectory().toPath().resolve(DATA_FOLDER).resolve(GLOBAL_DATA_FILE);
+            String json = GSON.toJson(globalData);
+            Files.writeString(globalFile, json);
+        } catch (IOException e) {
+            System.err.println("Failed to save global data: " + e.getMessage());
+        }
+    }
+    
+    public static PlayerData getPlayerData(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        
+        if (playerDataCache.containsKey(uuid)) {
+            return playerDataCache.get(uuid);
+        }
+        
+        // Load from file
+        try {
+            Path playerFile = player.getServer().getRunDirectory().toPath()
+                    .resolve(DATA_FOLDER)
+                    .resolve(PLAYERS_FOLDER)
+                    .resolve(uuid.toString() + ".json");
+            
+            if (Files.exists(playerFile)) {
+                String json = Files.readString(playerFile);
+                PlayerData data = GSON.fromJson(json, PlayerData.class);
+                playerDataCache.put(uuid, data);
+                return data;
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to load player data for " + player.getName().getString() + ": " + e.getMessage());
+        }
+        
+        // Create new data
+        PlayerData data = new PlayerData();
+        playerDataCache.put(uuid, data);
+        return data;
+    }
+    
+    public static void savePlayerData(ServerPlayerEntity player) {
+        UUID uuid = player.getUuid();
+        PlayerData data = playerDataCache.get(uuid);
+        
+        if (data == null) return;
+        
+        try {
+            Path playerFile = player.getServer().getRunDirectory().toPath()
+                    .resolve(DATA_FOLDER)
+                    .resolve(PLAYERS_FOLDER)
+                    .resolve(uuid.toString() + ".json");
+            
+            String json = GSON.toJson(data);
+            Files.writeString(playerFile, json);
+        } catch (IOException e) {
+            System.err.println("Failed to save player data for " + player.getName().getString() + ": " + e.getMessage());
+        }
+    }
+    
+    // Home methods
+    public static Vec3d getHome(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        return data.homeLocation;
+    }
+    
+    public static ServerWorld getHomeWorld(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        if (data.homeWorld == null) return null;
+        
+        Identifier worldId = new Identifier(data.homeWorld);
+        RegistryKey<World> worldKey = RegistryKey.of(RegistryKeys.WORLD, worldId);
+        return player.getServer().getWorld(worldKey);
+    }
+    
+    public static void setHome(ServerPlayerEntity player, Vec3d location, ServerWorld world) {
+        PlayerData data = getPlayerData(player);
+        data.homeLocation = location;
+        data.homeWorld = world.getRegistryKey().getValue().toString();
+        savePlayerData(player);
+    }
+    
+    // Spawn methods
+    public static Vec3d getSpawn() {
+        return globalData.spawnLocation;
+    }
+    
+    public static ServerWorld getSpawnWorld(MinecraftServer server) {
+        if (globalData.spawnWorld == null) {
+            return server.getOverworld();
+        }
+        
+        Identifier worldId = new Identifier(globalData.spawnWorld);
+        RegistryKey<World> worldKey = RegistryKey.of(RegistryKeys.WORLD, worldId);
+        ServerWorld world = server.getWorld(worldKey);
+        return world != null ? world : server.getOverworld();
+    }
+    
+    public static void setSpawn(Vec3d location, ServerWorld world) {
+        globalData.spawnLocation = location;
+        globalData.spawnWorld = world.getRegistryKey().getValue().toString();
+        saveGlobalData(world.getServer());
+    }
+    
+    // Back/last location methods
+    public static Vec3d getLastLocation(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        return data.lastLocation;
+    }
+    
+    public static ServerWorld getLastWorld(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        if (data.lastWorld == null) return null;
+        
+        Identifier worldId = new Identifier(data.lastWorld);
+        RegistryKey<World> worldKey = RegistryKey.of(RegistryKeys.WORLD, worldId);
+        return player.getServer().getWorld(worldKey);
+    }
+    
+    public static void setLastLocation(ServerPlayerEntity player, Vec3d location, ServerWorld world) {
+        PlayerData data = getPlayerData(player);
+        data.lastLocation = location;
+        data.lastWorld = world.getRegistryKey().getValue().toString();
+        savePlayerData(player);
+    }
+    
+    // God mode methods
+    public static boolean getGodMode(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        return data.godMode;
+    }
+    
+    public static void setGodMode(ServerPlayerEntity player, boolean enabled) {
+        PlayerData data = getPlayerData(player);
+        data.godMode = enabled;
+        savePlayerData(player);
+    }
+    
+    // Fly methods
+    public static boolean getFlyEnabled(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        return data.flyEnabled;
+    }
+    
+    public static void setFlyEnabled(ServerPlayerEntity player, boolean enabled) {
+        PlayerData data = getPlayerData(player);
+        data.flyEnabled = enabled;
+        savePlayerData(player);
+    }
+}
