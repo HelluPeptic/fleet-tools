@@ -20,7 +20,7 @@ public class FeedCommand {
     
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("feed")
-                .requires(Permissions.require(PERMISSION_FEED, 0))
+                .requires(Permissions.require(PERMISSION_FEED, 2))
                 .executes(FeedCommand::executeFeedSelf)
                 .then(argument("player", EntityArgumentType.player())
                         .requires(Permissions.require(PERMISSION_FEED_OTHERS, 2))

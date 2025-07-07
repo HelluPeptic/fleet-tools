@@ -21,7 +21,7 @@ public class FlyCommand {
     
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("fly")
-                .requires(Permissions.require(PERMISSION_FLY, 0))
+                .requires(Permissions.require(PERMISSION_FLY, 2))
                 .executes(FlyCommand::executeFlySelf)
                 .then(argument("player", EntityArgumentType.player())
                         .requires(Permissions.require(PERMISSION_FLY_OTHERS, 2))

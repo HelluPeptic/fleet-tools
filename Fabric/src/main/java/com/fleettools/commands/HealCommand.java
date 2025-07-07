@@ -20,7 +20,7 @@ public class HealCommand {
     
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("heal")
-                .requires(Permissions.require(PERMISSION_HEAL, 0))
+                .requires(Permissions.require(PERMISSION_HEAL, 2))
                 .executes(HealCommand::executeHealSelf)
                 .then(argument("player", EntityArgumentType.player())
                         .requires(Permissions.require(PERMISSION_HEAL_OTHERS, 2))

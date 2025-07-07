@@ -21,7 +21,7 @@ public class GodCommand {
     
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("god")
-                .requires(Permissions.require(PERMISSION_GOD, 0))
+                .requires(Permissions.require(PERMISSION_GOD, 2))
                 .executes(GodCommand::executeGodSelf)
                 .then(argument("player", EntityArgumentType.player())
                         .requires(Permissions.require(PERMISSION_GOD_OTHERS, 2))

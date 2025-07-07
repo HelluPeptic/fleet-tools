@@ -20,7 +20,7 @@ public class BackCommand {
     
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("back")
-                .requires(Permissions.require(PERMISSION_BACK, 0))
+                .requires(Permissions.require(PERMISSION_BACK, 2))
                 .executes(BackCommand::executeBack));
     }
     

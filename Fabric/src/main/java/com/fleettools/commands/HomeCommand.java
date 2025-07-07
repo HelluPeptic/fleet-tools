@@ -21,11 +21,11 @@ public class HomeCommand {
     
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("home")
-                .requires(Permissions.require(PERMISSION_HOME, 0))
+                .requires(Permissions.require(PERMISSION_HOME, 2))
                 .executes(HomeCommand::executeHome));
         
         dispatcher.register(literal("sethome")
-                .requires(Permissions.require(PERMISSION_SETHOME, 0))
+                .requires(Permissions.require(PERMISSION_SETHOME, 2))
                 .executes(HomeCommand::executeSetHome));
     }
     

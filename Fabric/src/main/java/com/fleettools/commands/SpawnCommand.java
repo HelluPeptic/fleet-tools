@@ -21,7 +21,7 @@ public class SpawnCommand {
     
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("spawn")
-                .requires(Permissions.require(PERMISSION_SPAWN, 0))
+                .requires(Permissions.require(PERMISSION_SPAWN, 2))
                 .executes(SpawnCommand::executeSpawn));
         
         dispatcher.register(literal("setspawn")

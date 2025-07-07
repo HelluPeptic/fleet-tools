@@ -8,29 +8,29 @@ Fleet Tools is a Fabric mod that brings the most popular and essential commands 
 
 - **`/home`** - Teleport to your home location
 - **`/sethome`** - Set your home at your current location
-- Permission: `fleettools.home`, `fleettools.sethome`
+- Permission: `fleettools.home`, `fleettools.sethome` (default: operators only)
 
 ### Spawn System
 
 - **`/spawn`** - Teleport to the server spawn
 - **`/setspawn`** - Set the server spawn at your current location (admin only)
-- Permission: `fleettools.spawn`, `fleettools.setspawn`
+- Permission: `fleettools.spawn`, `fleettools.setspawn` (default: operators only)
 
 ### Back System
 
 - **`/back`** - Return to your previous location
-- Permission: `fleettools.back`
+- Permission: `fleettools.back` (default: operators only)
 
 ### Health & Hunger
 
 - **`/heal [player]`** - Restore health to full and clear negative effects
 - **`/feed [player]`** - Restore hunger and saturation to full
-- Permission: `fleettools.heal`, `fleettools.heal.others`, `fleettools.feed`, `fleettools.feed.others`
+- Permission: `fleettools.heal`, `fleettools.heal.others`, `fleettools.feed`, `fleettools.feed.others` (default: operators only)
 
 ### Flight System
 
 - **`/fly [player]`** - Toggle flight mode
-- Permission: `fleettools.fly`, `fleettools.fly.others`
+- Permission: `fleettools.fly`, `fleettools.fly.others` (default: operators only)
 
 ### Game Mode
 
@@ -39,12 +39,12 @@ Fleet Tools is a Fabric mod that brings the most popular and essential commands 
 - **`/gms [player]`** - Switch to Survival mode
 - **`/gma [player]`** - Switch to Adventure mode
 - **`/gmsp [player]`** - Switch to Spectator mode
-- Permission: `fleettools.gamemode`, `fleettools.gamemode.others`
+- Permission: `fleettools.gamemode`, `fleettools.gamemode.others` (default: operators only)
 
 ### God Mode
 
 - **`/god [player]`** - Toggle invulnerability
-- Permission: `fleettools.god`, `fleettools.god.others`
+- Permission: `fleettools.god`, `fleettools.god.others` (default: operators only)
 
 ## Installation
 
@@ -54,14 +54,12 @@ Fleet Tools is a Fabric mod that brings the most popular and essential commands 
 4. Install the required dependencies:
    - Fabric API
    - Fabric Permissions API
-   - Collective (for configuration)
 5. Restart your server
 
 ## Dependencies
 
 - **Fabric API** - Core Fabric API
 - **Fabric Permissions API** - Permission system integration
-- **Collective** - Configuration framework
 
 ## Permissions
 
@@ -69,23 +67,23 @@ Fleet Tools uses the Fabric Permissions API for permission management. All comma
 
 ### Permission Nodes
 
-| Command                     | Permission Node              | Default Level   |
-| --------------------------- | ---------------------------- | --------------- |
-| `/home`                     | `fleettools.home`            | 0 (all players) |
-| `/sethome`                  | `fleettools.sethome`         | 0 (all players) |
-| `/spawn`                    | `fleettools.spawn`           | 0 (all players) |
-| `/setspawn`                 | `fleettools.setspawn`        | 2 (operators)   |
-| `/back`                     | `fleettools.back`            | 0 (all players) |
-| `/heal`                     | `fleettools.heal`            | 0 (all players) |
-| `/heal <player>`            | `fleettools.heal.others`     | 2 (operators)   |
-| `/feed`                     | `fleettools.feed`            | 0 (all players) |
-| `/feed <player>`            | `fleettools.feed.others`     | 2 (operators)   |
-| `/fly`                      | `fleettools.fly`             | 0 (all players) |
-| `/fly <player>`             | `fleettools.fly.others`      | 2 (operators)   |
-| `/gamemode`                 | `fleettools.gamemode`        | 2 (operators)   |
-| `/gamemode <mode> <player>` | `fleettools.gamemode.others` | 2 (operators)   |
-| `/god`                      | `fleettools.god`             | 0 (all players) |
-| `/god <player>`             | `fleettools.god.others`      | 2 (operators)   |
+| Command                     | Permission Node              | Default Level |
+| --------------------------- | ---------------------------- | ------------- |
+| `/home`                     | `fleettools.home`            | 2 (operators) |
+| `/sethome`                  | `fleettools.sethome`         | 2 (operators) |
+| `/spawn`                    | `fleettools.spawn`           | 2 (operators) |
+| `/setspawn`                 | `fleettools.setspawn`        | 2 (operators) |
+| `/back`                     | `fleettools.back`            | 2 (operators) |
+| `/heal`                     | `fleettools.heal`            | 2 (operators) |
+| `/heal <player>`            | `fleettools.heal.others`     | 2 (operators) |
+| `/feed`                     | `fleettools.feed`            | 2 (operators) |
+| `/feed <player>`            | `fleettools.feed.others`     | 2 (operators) |
+| `/fly`                      | `fleettools.fly`             | 2 (operators) |
+| `/fly <player>`             | `fleettools.fly.others`      | 2 (operators) |
+| `/gamemode`                 | `fleettools.gamemode`        | 2 (operators) |
+| `/gamemode <mode> <player>` | `fleettools.gamemode.others` | 2 (operators) |
+| `/god`                      | `fleettools.god`             | 2 (operators) |
+| `/god <player>`             | `fleettools.god.others`      | 2 (operators) |
 
 ## Data Storage
 
