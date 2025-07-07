@@ -115,6 +115,6 @@ publishing {
     }
 }
 
-archivesBaseName = 'flowframe-fabric-1.20.1'
+archivesBaseName = 'fleettools-fabric-1.20.1'
 
 

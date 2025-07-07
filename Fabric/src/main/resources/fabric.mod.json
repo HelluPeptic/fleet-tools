@@ -3,7 +3,7 @@
   "id": "fleettools",
   "version": "${version}",
 
-  "name": "Flowframe",
+  "name": "FleetTools",
   "description": "Adds fundamental server commands like /home, /spawn, and /back in a clean, configurable mod built for Fabric.",
   "authors": [ "HelluPeptic" ],
 
@@ -11,7 +11,7 @@
   "icon": "icon.png",
 
   "environment": "*",
-  "entrypoints": { "main": [ "com.fleettools.FleetToolsMod" ] },
+  "entrypoints": { "main": [ "com.fleettools.FleettoolsMod" ] },
 
   "mixins": [
     "fleettools.mixins.json"
