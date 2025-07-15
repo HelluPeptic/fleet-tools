@@ -26,10 +26,10 @@ public class DelHomeCommand {
         ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
         boolean removed = PlayerDataManager.removeHome(player);
         if (removed) {
-            player.sendMessage(Text.literal("§a[FleetTools] Your home has been deleted."), false);
+            player.sendMessage(Text.literal("§aYour home has been deleted."), false);
             return 1;
         } else {
-            player.sendMessage(Text.literal("§c[FleetTools] You don't have a home set."), false);
+            player.sendMessage(Text.literal("§cYou don't have a home set."), false);
             return 0;
         }
     }

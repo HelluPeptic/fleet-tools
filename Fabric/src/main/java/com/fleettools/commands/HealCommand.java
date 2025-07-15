@@ -31,7 +31,7 @@ public class HealCommand {
         ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
         
         healPlayer(player);
-        player.sendMessage(Text.literal("§a[FleetTools] You have been healed."), false);
+        player.sendMessage(Text.literal("§aYou have been healed."), false);
         
         return 1;
     }
@@ -40,11 +40,11 @@ public class HealCommand {
         ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
         
         healPlayer(target);
-        target.sendMessage(Text.literal("§a[FleetTools] You have been healed."), false);
+        target.sendMessage(Text.literal("§aYou have been healed."), false);
         
         if (context.getSource().getPlayer() != target) {
             context.getSource().sendFeedback(() -> 
-                Text.literal("§a[FleetTools] Healed " + target.getName().getString() + "."), true);
+                Text.literal("§aHealed " + target.getName().getString() + "."), true);
         }
         
         return 1;

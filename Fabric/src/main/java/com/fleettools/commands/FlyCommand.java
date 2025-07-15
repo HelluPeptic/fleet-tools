@@ -36,7 +36,7 @@ public class FlyCommand {
         
         setFlyMode(player, newState);
         
-        String message = newState ? "§a[FleetTools] Flight enabled." : "§c[FleetTools] Flight disabled.";
+        String message = newState ? "§aFlight enabled." : "§cFlight disabled.";
         player.sendMessage(Text.literal(message), false);
         
         return 1;
@@ -50,13 +50,13 @@ public class FlyCommand {
         
         setFlyMode(target, newState);
         
-        String message = newState ? "§a[FleetTools] Flight enabled." : "§c[FleetTools] Flight disabled.";
+        String message = newState ? "§aFlight enabled." : "§cFlight disabled.";
         target.sendMessage(Text.literal(message), false);
         
         if (context.getSource().getPlayer() != target) {
             String feedbackMessage = newState ? 
-                "§a[FleetTools] Enabled flight for " + target.getName().getString() + "." :
-                "§c[FleetTools] Disabled flight for " + target.getName().getString() + ".";
+                "§aEnabled flight for " + target.getName().getString() + "." :
+                "§cDisabled flight for " + target.getName().getString() + ".";
             context.getSource().sendFeedback(() -> Text.literal(feedbackMessage), true);
         }
         

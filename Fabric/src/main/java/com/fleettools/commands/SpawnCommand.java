@@ -49,7 +49,7 @@ public class SpawnCommand {
         
         // Teleport to spawn
         player.teleport(spawnWorld, spawnPos.x, spawnPos.y, spawnPos.z, player.getYaw(), player.getPitch());
-        player.sendMessage(Text.literal("§a[FleetTools] Teleported to spawn."), false);
+        player.sendMessage(Text.literal("§aTeleported to spawn."), false);
         
         return 1;
     }
@@ -61,7 +61,7 @@ public class SpawnCommand {
         ServerWorld currentWorld = player.getServerWorld();
         
         PlayerDataManager.setSpawn(currentPos, currentWorld);
-        player.sendMessage(Text.literal("§a[FleetTools] Spawn set at your current location."), false);
+        player.sendMessage(Text.literal("§aSpawn set at your current location."), false);
         
         return 1;
     }

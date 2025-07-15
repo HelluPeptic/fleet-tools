@@ -36,7 +36,7 @@ public class GodCommand {
         
         setGodMode(player, newState);
         
-        String message = newState ? "§a[FleetTools] God mode enabled." : "§c[FleetTools] God mode disabled.";
+        String message = newState ? "§aGod mode enabled." : "§cGod mode disabled.";
         player.sendMessage(Text.literal(message), false);
         
         return 1;
@@ -50,13 +50,13 @@ public class GodCommand {
         
         setGodMode(target, newState);
         
-        String message = newState ? "§a[FleetTools] God mode enabled." : "§c[FleetTools] God mode disabled.";
+        String message = newState ? "§aGod mode enabled." : "§cGod mode disabled.";
         target.sendMessage(Text.literal(message), false);
         
         if (context.getSource().getPlayer() != target) {
             String feedbackMessage = newState ? 
-                "§a[FleetTools] Enabled god mode for " + target.getName().getString() + "." :
-                "§c[FleetTools] Disabled god mode for " + target.getName().getString() + ".";
+                "§aEnabled god mode for " + target.getName().getString() + "." :
+                "§cDisabled god mode for " + target.getName().getString() + ".";
             context.getSource().sendFeedback(() -> Text.literal(feedbackMessage), true);
         }
         

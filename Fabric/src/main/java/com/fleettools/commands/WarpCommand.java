@@ -47,19 +47,19 @@ public class WarpCommand {
         String name = StringArgumentType.getString(context, "name").toLowerCase();
         PlayerDataManager.WarpData warp = PlayerDataManager.getWarp(name, player.getServer());
         if (warp == null) {
-            player.sendMessage(Text.literal("§c[FleetTools] Warp '" + name + "' does not exist."), false);
+            player.sendMessage(Text.literal("§cWarp '" + name + "' does not exist."), false);
             return 0;
         }
         Identifier worldId = new Identifier(warp.world);
         RegistryKey<net.minecraft.world.World> worldKey = RegistryKey.of(net.minecraft.registry.RegistryKeys.WORLD, worldId);
         ServerWorld world = player.getServer().getWorld(worldKey);
         if (world == null) {
-            player.sendMessage(Text.literal("§c[FleetTools] Warp world not found."), false);
+            player.sendMessage(Text.literal("§cWarp world not found."), false);
             return 0;
         }
         PlayerDataManager.setLastLocation(player, player.getPos(), player.getServerWorld());
         player.teleport(world, warp.location.x, warp.location.y, warp.location.z, player.getYaw(), player.getPitch());
-        player.sendMessage(Text.literal("§a[FleetTools] Warped to '" + name + "'."), false);
+        player.sendMessage(Text.literal("§aWarped to '" + name + "'."), false);
         return 1;
     }
 
@@ -69,7 +69,7 @@ public class WarpCommand {
         Vec3d pos = player.getPos();
         ServerWorld world = player.getServerWorld();
         PlayerDataManager.setWarp(name, pos, world);
-        player.sendMessage(Text.literal("§a[FleetTools] Warp '" + name + "' set at your current location."), false);
+        player.sendMessage(Text.literal("§aWarp '" + name + "' set at your current location."), false);
         return 1;
     }
 
@@ -78,10 +78,10 @@ public class WarpCommand {
         String name = StringArgumentType.getString(context, "name").toLowerCase();
         boolean removed = PlayerDataManager.delWarp(name, player.getServer());
         if (removed) {
-            player.sendMessage(Text.literal("§a[FleetTools] Warp '" + name + "' deleted."), false);
+            player.sendMessage(Text.literal("§aWarp '" + name + "' deleted."), false);
             return 1;
         } else {
-            player.sendMessage(Text.literal("§c[FleetTools] Warp '" + name + "' does not exist."), false);
+            player.sendMessage(Text.literal("§cWarp '" + name + "' does not exist."), false);
             return 0;
         }
     }

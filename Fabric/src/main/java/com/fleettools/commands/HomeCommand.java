@@ -34,7 +34,7 @@ public class HomeCommand {
         
         Vec3d homePos = PlayerDataManager.getHome(player);
         if (homePos == null) {
-            player.sendMessage(Text.literal("§c[FleetTools] You don't have a home set. Use /sethome to set one."), false);
+            player.sendMessage(Text.literal("§cYou don't have a home set. Use /sethome to set one."), false);
             return 0;
         }
         
@@ -48,7 +48,7 @@ public class HomeCommand {
         
         // Teleport to home
         player.teleport(homeWorld, homePos.x, homePos.y, homePos.z, player.getYaw(), player.getPitch());
-        player.sendMessage(Text.literal("§a[FleetTools] Teleported to home."), false);
+        player.sendMessage(Text.literal("§aTeleported to home."), false);
         
         return 1;
     }
@@ -60,7 +60,7 @@ public class HomeCommand {
         ServerWorld currentWorld = player.getServerWorld();
         
         PlayerDataManager.setHome(player, currentPos, currentWorld);
-        player.sendMessage(Text.literal("§a[FleetTools] Home set at your current location."), false);
+        player.sendMessage(Text.literal("§aHome set at your current location."), false);
         
         return 1;
     }
