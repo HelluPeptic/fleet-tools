@@ -1,3 +1,4 @@
+
 package com.fleettools.data;
 
 import com.google.gson.Gson;
@@ -19,6 +20,73 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerDataManager {
+    // --- Warp System ---
+    public static class WarpData {
+        public Vec3d location;
+        public String world;
+        public WarpData() {}
+        public WarpData(Vec3d location, String world) {
+            this.location = location;
+            this.world = world;
+        }
+    }
+
+    private static final String WARPS_FILE = "warps.json";
+    private static final java.lang.reflect.Type WARP_MAP_TYPE = new com.google.gson.reflect.TypeToken<Map<String, WarpData>>(){}.getType();
+    private static Map<String, WarpData> warps = new HashMap<>();
+
+    public static void loadWarps(MinecraftServer server) {
+        try {
+            Path warpsFile = server.getRunDirectory().toPath().resolve(DATA_FOLDER).resolve(WARPS_FILE);
+            if (Files.exists(warpsFile)) {
+                String json = Files.readString(warpsFile);
+                Map<String, WarpData> loaded = GSON.fromJson(json, WARP_MAP_TYPE);
+                if (loaded != null) warps = loaded;
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to load warps: " + e.getMessage());
+        }
+    }
+
+    public static void saveWarps(MinecraftServer server) {
+        try {
+            Path warpsFile = server.getRunDirectory().toPath().resolve(DATA_FOLDER).resolve(WARPS_FILE);
+            String json = GSON.toJson(warps, WARP_MAP_TYPE);
+            Files.writeString(warpsFile, json);
+        } catch (IOException e) {
+            System.err.println("Failed to save warps: " + e.getMessage());
+        }
+    }
+
+    public static Map<String, WarpData> getWarps() {
+        return warps;
+    }
+
+    public static void setWarp(String name, Vec3d location, ServerWorld world) {
+        warps.put(name, new WarpData(location, world.getRegistryKey().getValue().toString()));
+        saveWarps(world.getServer());
+    }
+
+    public static boolean delWarp(String name, MinecraftServer server) {
+        boolean removed = warps.remove(name) != null;
+        saveWarps(server);
+        return removed;
+    }
+
+    public static WarpData getWarp(String name, MinecraftServer server) {
+        return warps.get(name);
+    }
+    // Removes the player's home and returns true if a home was removed
+    public static boolean removeHome(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        if (data.homeLocation != null) {
+            data.homeLocation = null;
+            data.homeWorld = null;
+            savePlayerData(player);
+            return true;
+        }
+        return false;
+    }
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final String DATA_FOLDER = "fleettools";
     private static final String PLAYERS_FOLDER = "players";

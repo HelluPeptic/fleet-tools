@@ -12,9 +12,10 @@ public class FleettoolsMod implements ModInitializer {
     public void onInitialize() {
         System.out.println("[FLEET TOOLS] Initializing Fleet Tools mod - FULL VERSION");
         
-        // Initialize player data manager when server starts
+        // Initialize player data manager and warps when server starts
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             PlayerDataManager.init(server);
+            PlayerDataManager.loadWarps(server);
         });
         
         // Register commands that exist
@@ -27,10 +28,13 @@ public class FleettoolsMod implements ModInitializer {
             GamemodeCommand.register(dispatcher, registryAccess, environment);
             FlyCommand.register(dispatcher, registryAccess, environment);
             FeedCommand.register(dispatcher, registryAccess, environment);
+            DelHomeCommand.register(dispatcher, registryAccess, environment);
+            WarpCommand.register(dispatcher, registryAccess, environment);
         });
         
         // Register event handlers
         PlayerJoinHandler.register();
+
         
         System.out.println("[FLEET TOOLS] All features enabled - Commands, Events, Data Management");
     }

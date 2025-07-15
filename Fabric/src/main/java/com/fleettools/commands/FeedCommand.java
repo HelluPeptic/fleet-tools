@@ -31,7 +31,7 @@ public class FeedCommand {
         ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
         
         feedPlayer(player);
-        player.sendMessage(Text.literal("§aYou have been fed."), false);
+        player.sendMessage(Text.literal("§a[FleetTools] You have been fed."), false);
         
         return 1;
     }
@@ -40,11 +40,11 @@ public class FeedCommand {
         ServerPlayerEntity target = EntityArgumentType.getPlayer(context, "player");
         
         feedPlayer(target);
-        target.sendMessage(Text.literal("§aYou have been fed."), false);
+        target.sendMessage(Text.literal("§a[FleetTools] You have been fed."), false);
         
         if (context.getSource().getPlayer() != target) {
             context.getSource().sendFeedback(() -> 
-                Text.literal("§aFed " + target.getName().getString() + "."), true);
+                Text.literal("§a[FleetTools] Fed " + target.getName().getString() + "."), true);
         }
         
         return 1;

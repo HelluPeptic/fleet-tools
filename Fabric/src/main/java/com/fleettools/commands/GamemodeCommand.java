@@ -45,6 +45,14 @@ public class GamemodeCommand {
         dispatcher.register(literal("gmsp")
                 .requires(Permissions.require(PERMISSION_GAMEMODE, 2))
                 .executes(ctx -> changeGameMode(ctx.getSource().getPlayerOrThrow(), GameMode.SPECTATOR, ctx.getSource())));
+
+        // Add /gm <0|1|2|3> aliases
+        dispatcher.register(literal("gm")
+            .requires(Permissions.require(PERMISSION_GAMEMODE, 2))
+            .then(literal("0").executes(ctx -> changeGameMode(ctx.getSource().getPlayerOrThrow(), GameMode.SURVIVAL, ctx.getSource())))
+            .then(literal("1").executes(ctx -> changeGameMode(ctx.getSource().getPlayerOrThrow(), GameMode.CREATIVE, ctx.getSource())))
+            .then(literal("2").executes(ctx -> changeGameMode(ctx.getSource().getPlayerOrThrow(), GameMode.ADVENTURE, ctx.getSource())))
+            .then(literal("3").executes(ctx -> changeGameMode(ctx.getSource().getPlayerOrThrow(), GameMode.SPECTATOR, ctx.getSource()))));
     }
     
     private static int executeGamemodeSelf(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
@@ -64,9 +72,9 @@ public class GamemodeCommand {
     private static int changeGameMode(ServerPlayerEntity player, GameMode gameMode, ServerCommandSource source) {
         if (player.interactionManager.getGameMode() == gameMode) {
             if (source.getPlayer() == player) {
-                source.sendError(Text.literal("§cYou are already in " + gameMode.getName() + " mode."));
+                source.sendError(Text.literal("§c[FleetTools] You are already in " + gameMode.getName() + " mode."));
             } else {
-                source.sendError(Text.literal("§c" + player.getName().getString() + " is already in " + gameMode.getName() + " mode."));
+                source.sendError(Text.literal("§c[FleetTools] " + player.getName().getString() + " is already in " + gameMode.getName() + " mode."));
             }
             return 0;
         }
@@ -74,11 +82,11 @@ public class GamemodeCommand {
         player.changeGameMode(gameMode);
         
         if (source.getPlayer() == player) {
-            player.sendMessage(Text.literal("§aYour game mode has been changed to " + gameMode.getName() + "."), false);
+            player.sendMessage(Text.literal("§a[FleetTools] Your game mode has been changed to " + gameMode.getName() + "."), false);
         } else {
-            player.sendMessage(Text.literal("§aYour game mode has been changed to " + gameMode.getName() + "."), false);
+            player.sendMessage(Text.literal("§a[FleetTools] Your game mode has been changed to " + gameMode.getName() + "."), false);
             source.sendFeedback(() -> 
-                Text.literal("§aChanged " + player.getName().getString() + "'s game mode to " + gameMode.getName() + "."), true);
+                Text.literal("§a[FleetTools] Changed " + player.getName().getString() + "'s game mode to " + gameMode.getName() + "."), true);
         }
         
         return 1;

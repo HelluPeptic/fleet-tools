@@ -1,5 +1,38 @@
 # Fleet Tools - Essential Commands for Fabric
 
+## Recent Changes
+
+### 1.20.1+ Compatibility
+
+- All commands and features are now fully compatible with Minecraft 1.20.1 and Fabric Loader 0.15.7+.
+
+### Command Feedback
+
+- Command feedback suppression for operators has been removed. All command feedback now follows vanilla behavior (ops will see feedback for commands they have permission for).
+
+### Teleportation & /tp Command
+
+- Fleet Tools now overrides the `/tp` command to ensure only the executor receives feedback, but this feature can be toggled or removed as needed.
+- The `/tp` command supports all vanilla argument patterns: `/tp <player> <destination>`, `/tp <destination>`, `/tp <player> <x> <y> <z>`, `/tp <x> <y> <z>`.
+- Teleportation events are tracked for `/back` support.
+
+### Warps System
+
+- EssentialsX-style `/warp`, `/setwarp`, and `/delwarp` commands have been added.
+- Warps are stored persistently in `fleettools/warps.json`.
+
+### Permissions
+
+- All commands require explicit permissions (see table below) and are operator-only by default.
+- LuckPerms and Fabric Permissions API are supported for fine-grained control.
+
+### Bug Fixes & Refactoring
+
+- Fixed build-breaking issues with misplaced code and mixin targets.
+- Improved data storage and error handling for player and global data.
+
+---
+
 Fleet Tools is a Fabric mod that brings the most popular and essential commands from EssentialsX to Minecraft Fabric servers. This mod provides server administrators with fundamental teleportation, utility, and administrative commands with full permission support.
 
 ## Features
@@ -46,6 +79,13 @@ Fleet Tools is a Fabric mod that brings the most popular and essential commands 
 - **`/god [player]`** - Toggle invulnerability
 - Permission: `fleettools.god`, `fleettools.god.others` (default: operators only)
 
+### Warps System
+
+- **`/warp <name>`** - Teleport to a named warp location
+- **`/setwarp <name>`** - Set a warp at your current location
+- **`/delwarp <name>`** - Delete a named warp
+- Permission: `fleettools.warp`, `fleettools.setwarp`, `fleettools.delwarp` (default: operators only)
+
 ## Installation
 
 1. Make sure you have Fabric Loader installed
@@ -84,6 +124,9 @@ Fleet Tools uses the Fabric Permissions API for permission management. All comma
 | `/gamemode <mode> <player>` | `fleettools.gamemode.others` | 2 (operators) |
 | `/god`                      | `fleettools.god`             | 2 (operators) |
 | `/god <player>`             | `fleettools.god.others`      | 2 (operators) |
+| `/warp`                     | `fleettools.warp`            | 2 (operators) |
+| `/setwarp`                  | `fleettools.setwarp`         | 2 (operators) |
+| `/delwarp`                  | `fleettools.delwarp`         | 2 (operators) |
 
 ## Data Storage
 
@@ -122,6 +165,9 @@ The mod automatically creates necessary data files and folders on first run. No 
 /gmc               # Quick creative mode
 /gms               # Quick survival mode
 /god               # Toggle god mode
+/warp myWarp       # Teleport to a warp named 'myWarp'
+/setwarp myWarp    # Set a warp named 'myWarp' at current location
+/delwarp myWarp    # Delete the warp named 'myWarp'
 ```
 
 ## Support

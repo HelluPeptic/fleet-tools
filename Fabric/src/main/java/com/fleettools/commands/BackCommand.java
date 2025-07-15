@@ -29,7 +29,7 @@ public class BackCommand {
         
         Vec3d lastPos = PlayerDataManager.getLastLocation(player);
         if (lastPos == null) {
-            player.sendMessage(Text.literal("§cYou don't have a previous location to return to."), false);
+            player.sendMessage(Text.literal("§c[FleetTools] You don't have a previous location to return to."), false);
             return 0;
         }
         
@@ -43,7 +43,7 @@ public class BackCommand {
         
         // Teleport to previous location
         player.teleport(lastWorld, lastPos.x, lastPos.y, lastPos.z, player.getYaw(), player.getPitch());
-        player.sendMessage(Text.literal("§aTeleported to your previous location."), false);
+        player.sendMessage(Text.literal("[FleetTools] Teleported to your previous location."), false);
         
         return 1;
     }
