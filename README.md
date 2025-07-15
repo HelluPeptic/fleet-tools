@@ -1,38 +1,5 @@
 # Fleet Tools - Essential Commands for Fabric
 
-## Recent Changes
-
-### 1.20.1+ Compatibility
-
-- All commands and features are now fully compatible with Minecraft 1.20.1 and Fabric Loader 0.15.7+.
-
-### Command Feedback
-
-- Command feedback suppression for operators has been removed. All command feedback now follows vanilla behavior (ops will see feedback for commands they have permission for).
-
-### Teleportation & /tp Command
-
-- Fleet Tools now overrides the `/tp` command to ensure only the executor receives feedback, but this feature can be toggled or removed as needed.
-- The `/tp` command supports all vanilla argument patterns: `/tp <player> <destination>`, `/tp <destination>`, `/tp <player> <x> <y> <z>`, `/tp <x> <y> <z>`.
-- Teleportation events are tracked for `/back` support.
-
-### Warps System
-
-- EssentialsX-style `/warp`, `/setwarp`, and `/delwarp` commands have been added.
-- Warps are stored persistently in `fleettools/warps.json`.
-
-### Permissions
-
-- All commands require explicit permissions (see table below) and are operator-only by default.
-- LuckPerms and Fabric Permissions API are supported for fine-grained control.
-
-### Bug Fixes & Refactoring
-
-- Fixed build-breaking issues with misplaced code and mixin targets.
-- Improved data storage and error handling for player and global data.
-
----
-
 Fleet Tools is a Fabric mod that brings the most popular and essential commands from EssentialsX to Minecraft Fabric servers. This mod provides server administrators with fundamental teleportation, utility, and administrative commands with full permission support.
 
 ## Features
