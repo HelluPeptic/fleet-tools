@@ -1,10 +1,11 @@
-
 package com.fleettools.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.server.command.CommandManager;
@@ -17,6 +18,8 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import com.fleettools.data.PlayerDataManager;
 
+import java.util.concurrent.CompletableFuture;
+
 import static net.minecraft.server.command.CommandManager.literal;
 import static net.minecraft.server.command.CommandManager.argument;
 
@@ -25,10 +28,16 @@ public class WarpCommand {
     private static final String PERMISSION_SETWARP = "fleettools.setwarp";
     private static final String PERMISSION_DELWARP = "fleettools.delwarp";
 
+    private static final SuggestionProvider<ServerCommandSource> WARP_SUGGESTIONS = (context, builder) -> {
+        PlayerDataManager.getWarps().keySet().forEach(builder::suggest);
+        return CompletableFuture.completedFuture(builder.build());
+    };
+
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment environment) {
         dispatcher.register(literal("warp")
                 .requires(Permissions.require(PERMISSION_WARP, 2))
                 .then(argument("name", StringArgumentType.word())
+                        .suggests(WARP_SUGGESTIONS)
                         .executes(WarpCommand::executeWarp)));
 
         dispatcher.register(literal("setwarp")
@@ -39,6 +48,7 @@ public class WarpCommand {
         dispatcher.register(literal("delwarp")
                 .requires(Permissions.require(PERMISSION_DELWARP, 2))
                 .then(argument("name", StringArgumentType.word())
+                        .suggests(WARP_SUGGESTIONS)
                         .executes(WarpCommand::executeDelWarp)));
     }
 
