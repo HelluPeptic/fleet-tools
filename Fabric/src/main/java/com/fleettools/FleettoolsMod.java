@@ -30,6 +30,7 @@ public class FleettoolsMod implements ModInitializer {
             FeedCommand.register(dispatcher, registryAccess, environment);
             DelHomeCommand.register(dispatcher, registryAccess, environment);
             WarpCommand.register(dispatcher, registryAccess, environment);
+            DaylightPauseCommand.register(dispatcher, registryAccess, environment);
         });
         
         // Register event handlers
