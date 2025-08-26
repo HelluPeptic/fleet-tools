@@ -24,5 +24,13 @@ public class PlayerJoinHandler {
                 player.sendAbilitiesUpdate();
             }
         });
+        
+        // Save player's location when they disconnect
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            ServerPlayerEntity player = handler.getPlayer();
+            
+            // Save their current location as their last known location
+            PlayerDataManager.setLastLocation(player, player.getPos(), player.getServerWorld());
+        });
     }
 }

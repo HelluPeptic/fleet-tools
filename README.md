@@ -1,6 +1,6 @@
 # Fleet Tools - Essential Commands for Fabric
 
-Fleet Tools is a Fabric mod that brings the most popular and essential commands from EssentialsX to Minecraft Fabric servers. This mod provides server administrators with fundamental teleportation, utility, and administrative commands with full permission support.
+Fleet Tools is a comprehensive Fabric mod that brings essential server administration commands to Minecraft Fabric servers. This mod provides server administrators with teleportation, moderation, utility, and administrative commands with full permission support and tab completion.
 
 ## Features
 
@@ -8,7 +8,8 @@ Fleet Tools is a Fabric mod that brings the most popular and essential commands 
 
 - **`/home`** - Teleport to your home location
 - **`/sethome`** - Set your home at your current location
-- Permission: `fleettools.home`, `fleettools.sethome` (default: operators only)
+- **`/delhome`** - Delete your home location
+- Permission: `fleettools.home`, `fleettools.sethome`, `fleettools.delhome` (default: operators only)
 
 ### Spawn System
 
@@ -20,6 +21,12 @@ Fleet Tools is a Fabric mod that brings the most popular and essential commands 
 
 - **`/back`** - Return to your previous location
 - Permission: `fleettools.back` (default: operators only)
+
+### Advanced Teleportation
+
+- **`/tpo <player>`** or **`/tpoffline <player>`** - Teleport to any player's location (online or offline)
+- **`/top [player]`** - Teleport to the highest block above current position
+- Permission: `fleettools.tpo`, `fleettools.top`, `fleettools.top.others` (default: operators only)
 
 ### Health & Hunger
 
@@ -53,6 +60,26 @@ Fleet Tools is a Fabric mod that brings the most popular and essential commands 
 - **`/delwarp <name>`** - Delete a named warp
 - Permission: `fleettools.warp`, `fleettools.setwarp`, `fleettools.delwarp` (default: operators only)
 
+### Moderation Tools
+
+- **`/unban <player>`** - Remove player from ban list (substitute for /pardon)
+- **`/mute <player>`** - Prevent player from sending chat messages
+- **`/unmute <player>`** - Allow muted player to send chat messages again
+- **`/tempban <player> <time> [reason]`** - Temporarily ban player with automatic expiry
+  - Time formats: `30s`, `5m`, `2h`, `1d`, `7d`, etc.
+- Permission: `fleettools.unban`, `fleettools.mute`, `fleettools.unmute`, `fleettools.tempban` (default: level 3)
+
+### Communication
+
+- **`/msg <player> <message>`** - Send private message to player with actionbar display
+- Permission: `fleettools.msg` (default: operators only)
+
+### Utility Commands
+
+- **`/coords <player>`** - Display player's coordinates and world information
+- **`/daylight-pause`** - Pause or resume the daylight cycle
+- Permission: `fleettools.coords`, `fleettools.daylight` (default: operators only)
+
 ## Installation
 
 1. Make sure you have Fabric Loader installed
@@ -78,9 +105,13 @@ Fleet Tools uses the Fabric Permissions API for permission management. All comma
 | --------------------------- | ---------------------------- | ------------- |
 | `/home`                     | `fleettools.home`            | 2 (operators) |
 | `/sethome`                  | `fleettools.sethome`         | 2 (operators) |
+| `/delhome`                  | `fleettools.delhome`         | 2 (operators) |
 | `/spawn`                    | `fleettools.spawn`           | 2 (operators) |
 | `/setspawn`                 | `fleettools.setspawn`        | 2 (operators) |
 | `/back`                     | `fleettools.back`            | 2 (operators) |
+| `/tpo <player>`             | `fleettools.tpo`             | 2 (operators) |
+| `/top`                      | `fleettools.top`             | 2 (operators) |
+| `/top <player>`             | `fleettools.top.others`      | 2 (operators) |
 | `/heal`                     | `fleettools.heal`            | 2 (operators) |
 | `/heal <player>`            | `fleettools.heal.others`     | 2 (operators) |
 | `/feed`                     | `fleettools.feed`            | 2 (operators) |
@@ -94,13 +125,27 @@ Fleet Tools uses the Fabric Permissions API for permission management. All comma
 | `/warp`                     | `fleettools.warp`            | 2 (operators) |
 | `/setwarp`                  | `fleettools.setwarp`         | 2 (operators) |
 | `/delwarp`                  | `fleettools.delwarp`         | 2 (operators) |
+| `/unban`                    | `fleettools.unban`           | 3 (admins)    |
+| `/mute`                     | `fleettools.mute`            | 3 (admins)    |
+| `/unmute`                   | `fleettools.unmute`          | 3 (admins)    |
+| `/tempban`                  | `fleettools.tempban`         | 3 (admins)    |
+| `/msg`                      | `fleettools.msg`             | 2 (operators) |
+| `/coords`                   | `fleettools.coords`          | 2 (operators) |
+| `/daylight-pause`           | `fleettools.daylight`        | 2 (operators) |
 
 ## Data Storage
 
 Fleet Tools stores player data in JSON files in the `fleettools` folder within your server directory:
 
-- `fleettools/players/` - Individual player data (homes, last locations, etc.)
+- `fleettools/players/` - Individual player data (homes, last locations, mute status, temporary bans, etc.)
 - `fleettools/global.json` - Global server data (spawn location, etc.)
+- `fleettools/warps.json` - Warp locations and data
+
+### Automatic Features
+
+- **Location Tracking**: Player locations are automatically saved on disconnect for `/tpo` and `/back` commands
+- **Persistent States**: God mode, fly mode, and mute status persist across server restarts
+- **Automatic Cleanup**: Expired temporary bans are automatically removed on player join
 
 ## Compatibility
 
@@ -116,26 +161,99 @@ The mod automatically creates necessary data files and folders on first run. No 
 
 ### Basic Usage Examples
 
-```
+```bash
+# Teleportation Commands
 /home              # Teleport to your home
 /sethome           # Set home at current location
+/delhome           # Delete your home
 /spawn             # Teleport to spawn
 /setspawn          # Set spawn (admin only)
 /back              # Return to previous location
+
+# Advanced Teleportation
+/tpo Steve         # Teleport to Steve (online or offline)
+/tpoffline Alex    # Alternative syntax for offline teleportation
+/top               # Teleport to highest block above you
+/top Steve         # Teleport Steve to highest block above him
+
+# Player Management
 /heal              # Heal yourself
 /heal Steve        # Heal another player (admin only)
 /feed              # Feed yourself
 /feed Steve        # Feed another player (admin only)
 /fly               # Toggle flight for yourself
 /fly Steve         # Toggle flight for another player (admin only)
+
+# Game Mode Commands
 /gamemode creative # Change to creative mode
 /gmc               # Quick creative mode
 /gms               # Quick survival mode
+/gma               # Quick adventure mode
+/gmsp              # Quick spectator mode
 /god               # Toggle god mode
+
+# Warp System
 /warp myWarp       # Teleport to a warp named 'myWarp'
 /setwarp myWarp    # Set a warp named 'myWarp' at current location
 /delwarp myWarp    # Delete the warp named 'myWarp'
+
+# Moderation Commands
+/unban Steve       # Remove Steve from ban list (substitute for /pardon)
+/mute Steve        # Prevent Steve from sending chat messages
+/unmute Steve      # Allow Steve to send chat messages again
+/tempban Steve 1h  # Ban Steve for 1 hour
+/tempban Steve 1d Griefing  # Ban Steve for 1 day with reason
+
+# Communication
+/msg Steve Hello!  # Send private message to Steve
+
+# Utility Commands
+/coords Steve      # Show Steve's coordinates and world
+/daylight-pause    # Pause or resume daylight cycle
 ```
+
+### Temporary Ban Time Formats
+
+The `/tempban` command supports various time formats:
+
+- **Seconds**: `30s`, `45s`
+- **Minutes**: `5m`, `30m`, `60m`
+- **Hours**: `1h`, `2h`, `12h`, `24h`
+- **Days**: `1d`, `7d`, `30d`
+
+Examples:
+
+```bash
+/tempban griefer 30m           # 30 minute ban
+/tempban spammer 2h Spam       # 2 hour ban with reason
+/tempban cheater 1d Hacking    # 1 day ban with reason
+/tempban repeat_offender 7d    # 7 day ban
+```
+
+## Special Features
+
+### Tab Completion
+
+All commands feature intelligent tab completion:
+
+- **Player names**: Auto-completes with online players, and offline players for applicable commands
+- **Warp names**: Shows available warps when using `/warp` command
+- **Time formats**: Suggests common time formats for `/tempban` command
+- **Banned players**: Shows currently banned players for `/unban` command
+- **Muted players**: Shows currently muted players for `/unmute` command
+
+### Smart Teleportation
+
+- **`/tpo`**: Works with both online and offline players, teleporting to last known location for offline players
+- **`/top`**: Intelligently finds the highest safe block, ensuring 2 blocks of air space above landing spot
+- **`/back`**: Automatically tracks locations when using teleportation commands
+
+### Persistent Data
+
+- **God Mode**: Persists across server restarts and reconnections
+- **Fly Mode**: Automatically restored when players rejoin
+- **Mute Status**: Blocks chat messages and persists across sessions
+- **Temporary Bans**: Automatically enforced on login with time remaining display
 
 ## Support
 

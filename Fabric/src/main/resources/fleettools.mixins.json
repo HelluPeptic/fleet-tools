@@ -6,7 +6,8 @@
   "refmap": "fleettools_fabric.refmap.json",
   "priority": 500,
   "mixins": [
-    "ServerPlayerEntityMixin"
+    "ServerPlayerEntityMixin",
+    "ServerPlayNetworkHandlerMixin"
   ],
   "client": [],
   "server": [

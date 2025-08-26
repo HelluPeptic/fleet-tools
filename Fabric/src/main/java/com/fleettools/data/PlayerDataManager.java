@@ -94,6 +94,7 @@ public class PlayerDataManager {
     
     private static final Map<UUID, PlayerData> playerDataCache = new HashMap<>();
     private static GlobalData globalData;
+    private static MinecraftServer serverInstance;
     
     public static class PlayerData {
         public Vec3d homeLocation;
@@ -102,6 +103,9 @@ public class PlayerDataManager {
         public String lastWorld;
         public boolean godMode = false;
         public boolean flyEnabled = false;
+        public boolean muted = false;
+        public long tempBanUntil = 0; // Timestamp when temp ban expires (0 = not banned)
+        public String tempBanReason = "";
         
         public PlayerData() {}
     }
@@ -114,6 +118,7 @@ public class PlayerDataManager {
     }
     
     public static void init(MinecraftServer server) {
+        serverInstance = server; // Store server instance for later use
         try {
             Path dataDir = server.getRunDirectory().toPath().resolve(DATA_FOLDER);
             Path playersDir = dataDir.resolve(PLAYERS_FOLDER);
@@ -295,5 +300,101 @@ public class PlayerDataManager {
         PlayerData data = getPlayerData(player);
         data.flyEnabled = enabled;
         savePlayerData(player);
+    }
+    
+    // Mute methods
+    public static boolean isMuted(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        return data.muted;
+    }
+    
+    public static void setMuted(ServerPlayerEntity player, boolean muted) {
+        PlayerData data = getPlayerData(player);
+        data.muted = muted;
+        savePlayerData(player);
+    }
+    
+    // Temporary ban methods
+    public static boolean isTempBanned(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        if (data.tempBanUntil <= 0) return false;
+        
+        // Check if ban has expired
+        if (System.currentTimeMillis() >= data.tempBanUntil) {
+            // Ban expired, clear it
+            data.tempBanUntil = 0;
+            data.tempBanReason = "";
+            savePlayerData(player);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public static void setTempBan(ServerPlayerEntity player, long banUntil, String reason) {
+        PlayerData data = getPlayerData(player);
+        data.tempBanUntil = banUntil;
+        data.tempBanReason = reason;
+        savePlayerData(player);
+    }
+    
+    public static String getTempBanReason(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        return data.tempBanReason != null ? data.tempBanReason : "";
+    }
+    
+    public static long getTempBanExpiry(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        return data.tempBanUntil;
+    }
+    
+    public static void clearTempBan(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        data.tempBanUntil = 0;
+        data.tempBanReason = "";
+        savePlayerData(player);
+    }
+    
+    // UUID-based methods for offline players
+    public static Vec3d getLastLocationByUUID(java.util.UUID uuid) {
+        try {
+            Path playerFile = getPlayerDataPath(uuid);
+            if (Files.exists(playerFile)) {
+                String json = Files.readString(playerFile);
+                PlayerData data = GSON.fromJson(json, PlayerData.class);
+                return data != null ? data.lastLocation : null;
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to load player data for UUID " + uuid + ": " + e.getMessage());
+        }
+        return null;
+    }
+    
+    public static ServerWorld getLastWorldByUUID(java.util.UUID uuid, MinecraftServer server) {
+        try {
+            Path playerFile = getPlayerDataPath(uuid);
+            if (Files.exists(playerFile)) {
+                String json = Files.readString(playerFile);
+                PlayerData data = GSON.fromJson(json, PlayerData.class);
+                if (data != null && data.lastWorld != null) {
+                    Identifier worldId = new Identifier(data.lastWorld);
+                    RegistryKey<World> worldKey = RegistryKey.of(RegistryKeys.WORLD, worldId);
+                    return server.getWorld(worldKey);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to load player data for UUID " + uuid + ": " + e.getMessage());
+        }
+        return null;
+    }
+    
+    private static Path getPlayerDataPath(java.util.UUID uuid) {
+        if (serverInstance == null) {
+            return null;
+        }
+        return serverInstance.getRunDirectory().toPath()
+            .resolve(DATA_FOLDER)
+            .resolve(PLAYERS_FOLDER)
+            .resolve(uuid.toString() + ".json");
     }
 }

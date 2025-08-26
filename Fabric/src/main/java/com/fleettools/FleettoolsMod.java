@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import com.fleettools.commands.*;
 import com.fleettools.events.PlayerJoinHandler;
+import com.fleettools.events.TempBanHandler;
 import com.fleettools.data.PlayerDataManager;
 
 public class FleettoolsMod implements ModInitializer {
@@ -32,10 +33,19 @@ public class FleettoolsMod implements ModInitializer {
             WarpCommand.register(dispatcher, registryAccess, environment);
             DaylightPauseCommand.register(dispatcher, registryAccess, environment);
             MsgCommand.register(dispatcher, registryAccess, environment);
+            // Moderation commands
+            UnbanCommand.register(dispatcher, registryAccess, environment);
+            MuteCommand.register(dispatcher, registryAccess, environment);
+            TempbanCommand.register(dispatcher, registryAccess, environment);
+            // Utility commands
+            CoordsCommand.register(dispatcher, registryAccess, environment);
+            TpoCommand.register(dispatcher, registryAccess, environment);
+            TopCommand.register(dispatcher, registryAccess, environment);
         });
         
         // Register event handlers
         PlayerJoinHandler.register();
+        TempBanHandler.register();
 
         
         System.out.println("[FLEET TOOLS] All features enabled - Commands, Events, Data Management");
