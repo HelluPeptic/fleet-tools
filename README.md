@@ -80,6 +80,15 @@ Fleet Tools is a comprehensive Fabric mod that brings essential server administr
 - **`/daylight-pause`** - Pause or resume the daylight cycle
 - Permission: `fleettools.coords`, `fleettools.daylight` (default: operators only)
 
+### Time & Weather Control
+
+- **`/day`** - Set time to day (7:00 AM)
+- **`/night`** - Set time to night (7:00 PM)
+- **`/sun`** - Set weather to clear/sunny
+- **`/rain`** - Set weather to rain
+- **`/thunderstorm`** - Set weather to thunderstorm
+- Permission: `fleettools.time`, `fleettools.weather` (default: operators only)
+
 ## Installation
 
 1. Make sure you have Fabric Loader installed
@@ -132,6 +141,11 @@ Fleet Tools uses the Fabric Permissions API for permission management. All comma
 | `/msg`                      | `fleettools.msg`             | 2 (operators) |
 | `/coords`                   | `fleettools.coords`          | 2 (operators) |
 | `/daylight-pause`           | `fleettools.daylight`        | 2 (operators) |
+| `/day`                      | `fleettools.time`            | 2 (operators) |
+| `/night`                    | `fleettools.time`            | 2 (operators) |
+| `/sun`                      | `fleettools.weather`         | 2 (operators) |
+| `/rain`                     | `fleettools.weather`         | 2 (operators) |
+| `/thunderstorm`             | `fleettools.weather`         | 2 (operators) |
 
 ## Data Storage
 
@@ -210,55 +224,11 @@ The mod automatically creates necessary data files and folders on first run. No 
 # Utility Commands
 /coords Steve      # Show Steve's coordinates and world
 /daylight-pause    # Pause or resume daylight cycle
+
+# Time & Weather Commands
+/day               # Set time to day (7:00 AM)
+/night             # Set time to night (7:00 PM)
+/sun               # Set weather to clear/sunny
+/rain              # Set weather to rain
+/thunderstorm      # Set weather to thunderstorm
 ```
-
-### Temporary Ban Time Formats
-
-The `/tempban` command supports various time formats:
-
-- **Seconds**: `30s`, `45s`
-- **Minutes**: `5m`, `30m`, `60m`
-- **Hours**: `1h`, `2h`, `12h`, `24h`
-- **Days**: `1d`, `7d`, `30d`
-
-Examples:
-
-```bash
-/tempban griefer 30m           # 30 minute ban
-/tempban spammer 2h Spam       # 2 hour ban with reason
-/tempban cheater 1d Hacking    # 1 day ban with reason
-/tempban repeat_offender 7d    # 7 day ban
-```
-
-## Special Features
-
-### Tab Completion
-
-All commands feature intelligent tab completion:
-
-- **Player names**: Auto-completes with online players, and offline players for applicable commands
-- **Warp names**: Shows available warps when using `/warp` command
-- **Time formats**: Suggests common time formats for `/tempban` command
-- **Banned players**: Shows currently banned players for `/unban` command
-- **Muted players**: Shows currently muted players for `/unmute` command
-
-### Smart Teleportation
-
-- **`/tpo`**: Works with both online and offline players, teleporting to last known location for offline players
-- **`/top`**: Intelligently finds the highest safe block, ensuring 2 blocks of air space above landing spot
-- **`/back`**: Automatically tracks locations when using teleportation commands
-
-### Persistent Data
-
-- **God Mode**: Persists across server restarts and reconnections
-- **Fly Mode**: Automatically restored when players rejoin
-- **Mute Status**: Blocks chat messages and persists across sessions
-- **Temporary Bans**: Automatically enforced on login with time remaining display
-
-## Support
-
-For issues, suggestions, or contributions, please visit the [GitHub repository](https://github.com/your-repo/fleet-tools).
-
-## License
-
-This project is licensed under the MIT License.

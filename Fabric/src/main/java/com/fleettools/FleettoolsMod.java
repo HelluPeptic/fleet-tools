@@ -41,6 +41,8 @@ public class FleettoolsMod implements ModInitializer {
             CoordsCommand.register(dispatcher, registryAccess, environment);
             TpoCommand.register(dispatcher, registryAccess, environment);
             TopCommand.register(dispatcher, registryAccess, environment);
+            // Time and Weather commands
+            TimeWeatherCommands.register(dispatcher, registryAccess, environment);
         });
         
         // Register event handlers
