@@ -22,7 +22,7 @@ Fleet Tools is a comprehensive Fabric mod that brings essential server administr
 - **`/back`** - Return to your previous location
 - Permission: `fleettools.back` (default: operators only)
 
-### Advanced Teleportation
+### Teleportation
 
 - **`/tpo <player>`** or **`/tpoffline <player>`** - Teleport to any player's location (online or offline)
 - **`/top <player>`** - Teleport to the highest block above current position
