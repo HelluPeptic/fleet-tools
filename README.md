@@ -25,7 +25,7 @@ Fleet Tools is a comprehensive Fabric mod that brings essential server administr
 ### Advanced Teleportation
 
 - **`/tpo <player>`** or **`/tpoffline <player>`** - Teleport to any player's location (online or offline)
-- **`/top [player]`** - Teleport to the highest block above current position
+- **`/top <player>`** - Teleport to the highest block above current position
 - Permission: `fleettools.tpo`, `fleettools.top`, `fleettools.top.others` (default: operators only)
 
 ### Health & Hunger
