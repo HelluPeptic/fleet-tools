@@ -89,6 +89,14 @@ Fleet Tools is a comprehensive Fabric mod that brings essential server administr
 - **`/thunderstorm`** - Set weather to thunderstorm
 - Permission: `fleettools.time`, `fleettools.weather` (default: operators only)
 
+### Player Preferences
+
+- **`/keepinv`** - Toggle personal keep inventory setting (opt-out system)
+  - Default: Keep inventory **enabled** for all players
+  - When enabled: Keep all items but lose XP on death
+  - When disabled: Lose items and XP on death (vanilla behavior)
+- Permission: `fleettools.keepinv` (default: all players)
+
 ## Installation
 
 1. Make sure you have Fabric Loader installed
@@ -110,42 +118,43 @@ Fleet Tools uses the Fabric Permissions API for permission management. All comma
 
 ### Permission Nodes
 
-| Command                     | Permission Node              | Default Level |
-| --------------------------- | ---------------------------- | ------------- |
-| `/home`                     | `fleettools.home`            | 2 (operators) |
-| `/sethome`                  | `fleettools.sethome`         | 2 (operators) |
-| `/delhome`                  | `fleettools.delhome`         | 2 (operators) |
-| `/spawn`                    | `fleettools.spawn`           | 2 (operators) |
-| `/setspawn`                 | `fleettools.setspawn`        | 2 (operators) |
-| `/back`                     | `fleettools.back`            | 2 (operators) |
-| `/tpo <player>`             | `fleettools.tpo`             | 2 (operators) |
-| `/top`                      | `fleettools.top`             | 2 (operators) |
-| `/top <player>`             | `fleettools.top.others`      | 2 (operators) |
-| `/heal`                     | `fleettools.heal`            | 2 (operators) |
-| `/heal <player>`            | `fleettools.heal.others`     | 2 (operators) |
-| `/feed`                     | `fleettools.feed`            | 2 (operators) |
-| `/feed <player>`            | `fleettools.feed.others`     | 2 (operators) |
-| `/fly`                      | `fleettools.fly`             | 2 (operators) |
-| `/fly <player>`             | `fleettools.fly.others`      | 2 (operators) |
-| `/gamemode`                 | `fleettools.gamemode`        | 2 (operators) |
-| `/gamemode <mode> <player>` | `fleettools.gamemode.others` | 2 (operators) |
-| `/god`                      | `fleettools.god`             | 2 (operators) |
-| `/god <player>`             | `fleettools.god.others`      | 2 (operators) |
-| `/warp`                     | `fleettools.warp`            | 2 (operators) |
-| `/setwarp`                  | `fleettools.setwarp`         | 2 (operators) |
-| `/delwarp`                  | `fleettools.delwarp`         | 2 (operators) |
-| `/unban`                    | `fleettools.unban`           | 3 (admins)    |
-| `/mute`                     | `fleettools.mute`            | 3 (admins)    |
-| `/unmute`                   | `fleettools.unmute`          | 3 (admins)    |
-| `/tempban`                  | `fleettools.tempban`         | 3 (admins)    |
-| `/msg`                      | `fleettools.msg`             | 2 (operators) |
-| `/coords`                   | `fleettools.coords`          | 2 (operators) |
-| `/daylight-pause`           | `fleettools.daylight`        | 2 (operators) |
-| `/day`                      | `fleettools.time`            | 2 (operators) |
-| `/night`                    | `fleettools.time`            | 2 (operators) |
-| `/sun`                      | `fleettools.weather`         | 2 (operators) |
-| `/rain`                     | `fleettools.weather`         | 2 (operators) |
-| `/thunderstorm`             | `fleettools.weather`         | 2 (operators) |
+| Command                     | Permission Node              | Default Level   |
+| --------------------------- | ---------------------------- | --------------- |
+| `/home`                     | `fleettools.home`            | 2 (operators)   |
+| `/sethome`                  | `fleettools.sethome`         | 2 (operators)   |
+| `/delhome`                  | `fleettools.delhome`         | 2 (operators)   |
+| `/spawn`                    | `fleettools.spawn`           | 2 (operators)   |
+| `/setspawn`                 | `fleettools.setspawn`        | 2 (operators)   |
+| `/back`                     | `fleettools.back`            | 2 (operators)   |
+| `/tpo <player>`             | `fleettools.tpo`             | 2 (operators)   |
+| `/top`                      | `fleettools.top`             | 2 (operators)   |
+| `/top <player>`             | `fleettools.top.others`      | 2 (operators)   |
+| `/heal`                     | `fleettools.heal`            | 2 (operators)   |
+| `/heal <player>`            | `fleettools.heal.others`     | 2 (operators)   |
+| `/feed`                     | `fleettools.feed`            | 2 (operators)   |
+| `/feed <player>`            | `fleettools.feed.others`     | 2 (operators)   |
+| `/fly`                      | `fleettools.fly`             | 2 (operators)   |
+| `/fly <player>`             | `fleettools.fly.others`      | 2 (operators)   |
+| `/gamemode`                 | `fleettools.gamemode`        | 2 (operators)   |
+| `/gamemode <mode> <player>` | `fleettools.gamemode.others` | 2 (operators)   |
+| `/god`                      | `fleettools.god`             | 2 (operators)   |
+| `/god <player>`             | `fleettools.god.others`      | 2 (operators)   |
+| `/warp`                     | `fleettools.warp`            | 2 (operators)   |
+| `/setwarp`                  | `fleettools.setwarp`         | 2 (operators)   |
+| `/delwarp`                  | `fleettools.delwarp`         | 2 (operators)   |
+| `/unban`                    | `fleettools.unban`           | 3 (admins)      |
+| `/mute`                     | `fleettools.mute`            | 3 (admins)      |
+| `/unmute`                   | `fleettools.unmute`          | 3 (admins)      |
+| `/tempban`                  | `fleettools.tempban`         | 3 (admins)      |
+| `/msg`                      | `fleettools.msg`             | 2 (operators)   |
+| `/coords`                   | `fleettools.coords`          | 2 (operators)   |
+| `/daylight-pause`           | `fleettools.daylight`        | 2 (operators)   |
+| `/day`                      | `fleettools.time`            | 2 (operators)   |
+| `/night`                    | `fleettools.time`            | 2 (operators)   |
+| `/sun`                      | `fleettools.weather`         | 2 (operators)   |
+| `/rain`                     | `fleettools.weather`         | 2 (operators)   |
+| `/thunderstorm`             | `fleettools.weather`         | 2 (operators)   |
+| `/keepinv`                  | `fleettools.keepinv`         | 0 (all players) |
 
 ## Data Storage
 
@@ -158,8 +167,12 @@ Fleet Tools stores player data in JSON files in the `fleettools` folder within y
 ### Automatic Features
 
 - **Location Tracking**: Player locations are automatically saved on disconnect for `/tpo` and `/back` commands
-- **Persistent States**: God mode, fly mode, and mute status persist across server restarts
+- **Persistent States**: God mode, fly mode, mute status, and keep inventory preferences persist across server restarts
 - **Automatic Cleanup**: Expired temporary bans are automatically removed on player join
+- **Keep Inventory System**: Opt-out keep inventory is enabled by default for all players
+  - Players keep items but lose XP on death (when enabled)
+  - Individual players can disable their keep inventory with `/keepinv`
+  - Setting persists across server restarts and reconnections
 
 ## Compatibility
 
@@ -231,4 +244,7 @@ The mod automatically creates necessary data files and folders on first run. No 
 /sun               # Set weather to clear/sunny
 /rain              # Set weather to rain
 /thunderstorm      # Set weather to thunderstorm
+
+# Player Preferences
+/keepinv           # Toggle keep inventory (default: enabled, opt-out system)
 ```

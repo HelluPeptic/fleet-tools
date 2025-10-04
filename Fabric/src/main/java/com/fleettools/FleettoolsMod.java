@@ -6,19 +6,20 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import com.fleettools.commands.*;
 import com.fleettools.events.PlayerJoinHandler;
 import com.fleettools.events.TempBanHandler;
+import com.fleettools.events.KeepInventoryHandler;
 import com.fleettools.data.PlayerDataManager;
 
 public class FleettoolsMod implements ModInitializer {
     @Override
     public void onInitialize() {
         System.out.println("[FLEET TOOLS] Initializing Fleet Tools mod - FULL VERSION");
-        
+
         // Initialize player data manager and warps when server starts
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             PlayerDataManager.init(server);
             PlayerDataManager.loadWarps(server);
         });
-        
+
         // Register commands that exist
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             BackCommand.register(dispatcher, registryAccess, environment);
@@ -43,13 +44,15 @@ public class FleettoolsMod implements ModInitializer {
             TopCommand.register(dispatcher, registryAccess, environment);
             // Time and Weather commands
             TimeWeatherCommands.register(dispatcher, registryAccess, environment);
+            // Player preference commands
+            KeepInvCommand.register(dispatcher, registryAccess, environment);
         });
-        
+
         // Register event handlers
         PlayerJoinHandler.register();
         TempBanHandler.register();
+        KeepInventoryHandler.register();
 
-        
         System.out.println("[FLEET TOOLS] All features enabled - Commands, Events, Data Management");
     }
 }
