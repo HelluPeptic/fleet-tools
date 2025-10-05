@@ -12,13 +12,13 @@ public class FleettoolsMod implements ModInitializer {
     @Override
     public void onInitialize() {
         System.out.println("[FLEET TOOLS] Initializing Fleet Tools mod - FULL VERSION");
-        
+
         // Initialize player data manager and warps when server starts
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             PlayerDataManager.init(server);
             PlayerDataManager.loadWarps(server);
         });
-        
+
         // Register commands that exist
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             BackCommand.register(dispatcher, registryAccess, environment);
@@ -33,6 +33,7 @@ public class FleettoolsMod implements ModInitializer {
             WarpCommand.register(dispatcher, registryAccess, environment);
             DaylightPauseCommand.register(dispatcher, registryAccess, environment);
             MsgCommand.register(dispatcher, registryAccess, environment);
+            KeepInvCommand.register(dispatcher, registryAccess, environment);
             // Moderation commands
             UnbanCommand.register(dispatcher, registryAccess, environment);
             MuteCommand.register(dispatcher, registryAccess, environment);
@@ -44,12 +45,11 @@ public class FleettoolsMod implements ModInitializer {
             // Time and Weather commands
             TimeWeatherCommands.register(dispatcher, registryAccess, environment);
         });
-        
+
         // Register event handlers
         PlayerJoinHandler.register();
         TempBanHandler.register();
 
-        
         System.out.println("[FLEET TOOLS] All features enabled - Commands, Events, Data Management");
     }
 }
