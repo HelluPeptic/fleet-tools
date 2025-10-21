@@ -9,7 +9,8 @@
     "ServerPlayerEntityMixin",
     "ServerPlayNetworkHandlerMixin",
     "PlayerDeathKeepInvMixin",
-    "PlayerRespawnMixin"
+    "PlayerRespawnMixin",
+    "LivingEntityDeathMixin"
   ],
   "client": [],
   "server": [
