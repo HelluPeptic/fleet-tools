@@ -24,6 +24,8 @@ public class KeepInvCommand {
         dispatcher.register(literal("keepinv")
                 .requires(Permissions.require(PERMISSION_KEEPINV, 0)) // Allow all players to use this command
                 .executes(KeepInvCommand::executeKeepInvSelf)
+                .then(literal("status")
+                        .executes(KeepInvCommand::executeKeepInvStatus))
                 .then(argument("player", EntityArgumentType.player())
                         .requires(Permissions.require(PERMISSION_KEEPINV_OTHERS, 2))
                         .executes(KeepInvCommand::executeKeepInvOther)));
@@ -39,6 +41,17 @@ public class KeepInvCommand {
 
         String message = newState ? "§aKeep inventory enabled. You will keep your items on death (but lose XP)."
                 : "§cKeep inventory disabled. You will lose your items on death.";
+        player.sendMessage(Text.literal(message), false);
+
+        return 1;
+    }
+
+    private static int executeKeepInvStatus(CommandContext<ServerCommandSource> context) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().getPlayerOrThrow();
+
+        boolean currentState = PlayerDataManager.getKeepInventory(player);
+        String message = currentState ? "§aKeep inventory is currently §lENABLED§r§a. You will keep your items on death."
+                : "§cKeep inventory is currently §lDISABLED§r§c. You will lose your items on death.";
         player.sendMessage(Text.literal(message), false);
 
         return 1;

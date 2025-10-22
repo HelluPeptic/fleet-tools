@@ -48,6 +48,17 @@ Fleet Tools is a comprehensive Fabric mod that brings essential server administr
 - **`/gmsp [player]`** - Switch to Spectator mode
 - Permission: `fleettools.gamemode`, `fleettools.gamemode.others` (default: operators only)
 
+### Keep Inventory System
+
+- **`/keepinv`** - Toggle your personal keep inventory setting (enabled by default)
+- **`/keepinv status`** - Check your current keep inventory status
+- **`/keepinv <player>`** - Toggle keep inventory for another player (admin only)
+- Permission: `fleettools.keepinv`, `fleettools.keepinv.others` (default: all players for self, operators for others)
+
+The keep inventory system is an opt-out feature that allows players to keep their items on death without affecting the server's gamerule. By default, all players have keep inventory enabled, but they can turn it off if they prefer the vanilla experience. Players still lose XP when they die, maintaining some consequence for death.
+
+This system works with modded inventories, trinkets, and backpacks, ensuring comprehensive item protection regardless of which inventory expansion mods are installed.
+
 ### God Mode
 
 - **`/god [player]`** - Toggle invulnerability

@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import com.fleettools.commands.*;
 import com.fleettools.events.PlayerJoinHandler;
 import com.fleettools.events.TempBanHandler;
+import com.fleettools.events.KeepInventoryHandler;
 import com.fleettools.data.PlayerDataManager;
 
 public class FleettoolsMod implements ModInitializer {
@@ -49,6 +50,7 @@ public class FleettoolsMod implements ModInitializer {
         // Register event handlers
         PlayerJoinHandler.register();
         TempBanHandler.register();
+        KeepInventoryHandler.register();
 
         System.out.println("[FLEET TOOLS] All features enabled - Commands, Events, Data Management");
     }
