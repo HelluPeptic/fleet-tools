@@ -1,23 +1,25 @@
 
 package com.fleettools.data;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.util.Identifier;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 public class PlayerDataManager {
     // --- Warp System ---
@@ -114,8 +116,59 @@ public class PlayerDataManager {
         public boolean keepInventory = true; // Opt-out keep inventory - enabled by default
         public long tempBanUntil = 0; // Timestamp when temp ban expires (0 = not banned)
         public String tempBanReason = "";
+        
+        // Stored inventory data for keep inventory feature
+        public transient StoredInventoryData storedInventory = null;
 
         public PlayerData() {
+        }
+    }
+    
+    public static class StoredInventoryData {
+        public ItemStack[] mainInventory;
+        public ItemStack[] armorInventory;
+        public ItemStack[] offhandInventory;
+        public int selectedSlot;
+        public long deathTime;
+        
+        public StoredInventoryData() {
+        }
+        
+        public StoredInventoryData(ServerPlayerEntity player) {
+            this.mainInventory = new ItemStack[36];
+            this.armorInventory = new ItemStack[4];
+            this.offhandInventory = new ItemStack[1];
+            this.selectedSlot = player.getInventory().selectedSlot;
+            this.deathTime = System.currentTimeMillis();
+            
+            // Copy inventory contents
+            for (int i = 0; i < 36; i++) {
+                this.mainInventory[i] = player.getInventory().main.get(i).copy();
+            }
+            for (int i = 0; i < 4; i++) {
+                this.armorInventory[i] = player.getInventory().armor.get(i).copy();
+            }
+            this.offhandInventory[0] = player.getInventory().offHand.get(0).copy();
+        }
+        
+        public void restore(ServerPlayerEntity player) {
+            // Clear current inventory
+            player.getInventory().clear();
+            
+            // Restore saved inventory
+            for (int i = 0; i < 36; i++) {
+                player.getInventory().main.set(i, this.mainInventory[i].copy());
+            }
+            for (int i = 0; i < 4; i++) {
+                player.getInventory().armor.set(i, this.armorInventory[i].copy());
+            }
+            player.getInventory().offHand.set(0, this.offhandInventory[0].copy());
+            player.getInventory().selectedSlot = this.selectedSlot;
+            
+            // Mark inventory as changed
+            player.currentScreenHandler.sendContentUpdates();
+            player.playerScreenHandler.onContentChanged(player.getInventory());
+            player.sendAbilitiesUpdate();
         }
     }
 
@@ -423,5 +476,31 @@ public class PlayerDataManager {
                 .resolve(DATA_FOLDER)
                 .resolve(PLAYERS_FOLDER)
                 .resolve(uuid.toString() + ".json");
+    }
+    
+    // Inventory Storage methods for Keep Inventory feature
+    public static void storeInventoryOnDeath(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        data.storedInventory = new StoredInventoryData(player);
+        // Don't save to disk immediately - inventory data is transient
+        // It will be saved when the player data is next saved
+    }
+    
+    public static boolean hasStoredInventory(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        return data.storedInventory != null;
+    }
+    
+    public static void restoreInventoryOnRespawn(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        if (data.storedInventory != null) {
+            data.storedInventory.restore(player);
+            data.storedInventory = null; // Clear stored inventory after restoration
+        }
+    }
+    
+    public static void clearStoredInventory(ServerPlayerEntity player) {
+        PlayerData data = getPlayerData(player);
+        data.storedInventory = null;
     }
 }
